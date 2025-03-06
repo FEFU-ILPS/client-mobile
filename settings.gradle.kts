@@ -1,12 +1,6 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -23,3 +17,4 @@ rootProject.name = "MobileClient"
 include(":app")
 include(":core:ui")
 include(":network")
+include(":feature:text_list")
