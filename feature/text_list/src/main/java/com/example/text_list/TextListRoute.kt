@@ -3,6 +3,7 @@ package com.example.text_list
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +26,7 @@ import com.google.samples.modularization.ui.Loading
 @Composable
 fun TextListRoute(
     viewModel: TextListViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.fillMaxSize()
 ) {
     val state by viewModel.uiState.collectAsState()
     TextListScreen(
