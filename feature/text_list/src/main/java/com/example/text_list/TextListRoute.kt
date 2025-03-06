@@ -25,20 +25,21 @@ import com.google.samples.modularization.ui.Loading
 
 @Composable
 fun TextListRoute(
+    onSelectText: (String) -> Unit,
     viewModel: TextListViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxSize()
 ) {
     val state by viewModel.uiState.collectAsState()
     TextListScreen(
         state = state,
-        onSelectText = {},
+        onSelectText = onSelectText,
         onRetry = { viewModel.retry() },
         modifier = modifier
     )
 }
 
 @Composable
-fun TextListScreen(
+internal fun TextListScreen(
     state: TextListUiState,
     onSelectText: (String) -> Unit,
     onRetry: () -> Unit,
