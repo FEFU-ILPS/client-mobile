@@ -50,6 +50,7 @@ hilt {
 dependencies {
 
     implementation(project(":feature:text_list"))
+    implementation(project(":feature:text"))
     implementation(project(":network"))
 
     implementation("androidx.core:core-ktx:1.9.0")

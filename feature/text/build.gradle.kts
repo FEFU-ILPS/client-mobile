@@ -6,7 +6,7 @@ plugins {
 apply<MainGradlePlugin>()
 
 android {
-    namespace = "com.example.text_list"
+    namespace = "com.example.text"
 }
 
 dependencies {
