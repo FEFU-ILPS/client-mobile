@@ -1,4 +1,4 @@
-package com.example.ui
+package com.example.text_list
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
