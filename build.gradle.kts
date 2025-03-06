@@ -6,5 +6,6 @@ buildscript {
 
     dependencies {
         classpath(Dependencies.hiltAgp)
+        classpath(libs.kotlin.gradle.plugin)
     }
 }
