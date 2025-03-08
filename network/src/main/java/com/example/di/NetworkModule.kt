@@ -1,6 +1,7 @@
 package com.example.di
 
 import com.example.Urls
+import com.example.api.FeedbackApi
 import com.example.api.TextApi
 import dagger.Module
 import dagger.Provides
@@ -36,5 +37,16 @@ class NetworkModule {
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(TextApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFeedbackApi(okHttpClient: OkHttpClient): FeedbackApi {
+        return Retrofit.Builder()
+            .baseUrl(Urls.FEEDBACK_API_URL)
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create(FeedbackApi::class.java)
     }
 }
