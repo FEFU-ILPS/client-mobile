@@ -25,5 +25,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     compose()
+    retrofit()
     hilt()
 }
