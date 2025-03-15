@@ -51,6 +51,7 @@ dependencies {
 
     implementation(project(":feature:text_list"))
     implementation(project(":feature:text"))
+    implementation(project(":feature:feedback"))
     implementation(project(":network"))
 
     implementation("androidx.core:core-ktx:1.9.0")
@@ -66,7 +67,7 @@ dependencies {
 
     //navigation
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    
+
     retrofit()
     room()
     hilt()

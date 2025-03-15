@@ -1,4 +1,4 @@
-package com.example.text
+package com.example.feedback
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

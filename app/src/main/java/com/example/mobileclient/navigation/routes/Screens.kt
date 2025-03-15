@@ -7,4 +7,6 @@ sealed class Screens(
     object TextList : Screens("text_list")
 
     object Text : Screens("text")
+
+    object Feedback : Screens("feedback")
 }

@@ -46,7 +46,7 @@ internal fun TextListScreen(
     modifier: Modifier = Modifier
 ) {
     when (state) {
-        TextListUiState.Loading -> Loading()
+        TextListUiState.Loading -> Loading(modifier = Modifier.fillMaxSize())
 
         is TextListUiState.Success -> Content(
             textItems = state.texts,
@@ -56,7 +56,8 @@ internal fun TextListScreen(
 
         is TextListUiState.Error -> Error(
             cause = "Не удалось загрузить тексты",
-            onRetry = onRetry
+            onRetry = onRetry,
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
