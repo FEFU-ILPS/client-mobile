@@ -1,8 +1,8 @@
 package com.example.api.dto
 
-data class TextDto(
+data class FeedBackTextDto(
     val id: String,
-    val title: String,
     val text: String,
+    val title: String,
     val phoneticTranscription: String
 )

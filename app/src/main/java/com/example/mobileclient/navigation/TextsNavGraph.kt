@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.feedback.FeedbackRoute
 import com.example.mobileclient.navigation.routes.Graphs
 import com.example.mobileclient.navigation.routes.Screens
 import com.example.text.TextRoute
@@ -27,6 +28,20 @@ fun NavGraphBuilder.textsNavGraph(navController: NavController) {
             listOf(navArgument("textId") { type = NavType.StringType })
         ) {
             TextRoute(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onGoToFeedbackScreen = { id ->
+                    navController.navigate(Screens.Feedback.route + "/" + id)
+                }
+            )
+        }
+
+        composable(
+            route = Screens.Feedback.route + "/{feedbackId}",
+            listOf(navArgument("feedbackId") { type = NavType.StringType })
+        ) {
+            FeedbackRoute(
                 onNavigateBack = {
                     navController.popBackStack()
                 }

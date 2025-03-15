@@ -14,7 +14,8 @@ object Dependencies {
     const val hiltAgp = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
 
     const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp}"
-    const val okHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
+    const val okHttpLoggingInterceptor =
+        "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
 
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
