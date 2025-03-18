@@ -9,4 +9,8 @@ sealed class Screens(
     object Text : Screens("text")
 
     object Feedback : Screens("feedback")
+
+    object SignUp : Screens("sign_up")
+
+    object SignIn : Screens("sign_in")
 }

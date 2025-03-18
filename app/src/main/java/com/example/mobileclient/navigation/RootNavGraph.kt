@@ -12,8 +12,9 @@ fun RootNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Graphs.Texts.route
+        startDestination = Graphs.Auth.route
     ) {
+        authNavGraph(navController)
         textsNavGraph(navController)
     }
 }

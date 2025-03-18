@@ -52,7 +52,10 @@ dependencies {
     implementation(project(":feature:text_list"))
     implementation(project(":feature:text"))
     implementation(project(":feature:feedback"))
-    implementation(project(":network"))
+    implementation(project(":core:data:network"))
+    implementation(project(":core:data:data_store"))
+    implementation(project(":feature:auth:sign_in"))
+    implementation(project(":feature:auth:sign_up"))
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -68,8 +71,10 @@ dependencies {
     //navigation
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
-    retrofit()
-    room()
-    hilt()
     compose()
+    room()
+    retrofit()
+    hilt()
+    dataStore()
+
 }
