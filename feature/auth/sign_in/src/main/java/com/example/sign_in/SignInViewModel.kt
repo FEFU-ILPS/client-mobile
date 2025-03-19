@@ -29,6 +29,7 @@ class SignInViewModel @Inject constructor(
     val isRememberBtnClicked = mutableStateOf(false)
     val userNameError = mutableStateOf<String?>(null)
     val passwordError = mutableStateOf<String?>(null)
+    val isUserSignedIn = mutableStateOf(false)
 
 
     fun signIn() {
@@ -55,7 +56,7 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val isUserRemembered = authDataStoreRepository.getUserRememberedFlag().first()
             if (isUserRemembered == true) {
-                signIn()
+                isUserSignedIn.value = true
             }
         }
     }

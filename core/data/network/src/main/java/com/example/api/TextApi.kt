@@ -7,9 +7,9 @@ import retrofit2.http.Path
 
 interface TextApi {
 
-    @GET("/texts")
+    @GET("texts")
     suspend fun getTexts(): List<TextListItemDto>
 
-    @GET("/texts/{textId}")
+    @GET("texts/{textId}")
     suspend fun getText(@Path("textId") textId: String): TextDto
 }

@@ -64,7 +64,7 @@ internal fun FeedbackScreen(
         when (state) {
             is FeedbackUiState.Error -> {
                 Error(
-                    cause = "Не удалось загрузить текст",
+                    cause = "Не удалось загрузить отчет",
                     onRetry = onRetry,
                     modifier = Modifier.fillMaxSize()
                 )

@@ -56,6 +56,7 @@ dependencies {
     implementation(project(":core:data:data_store"))
     implementation(project(":feature:auth:sign_in"))
     implementation(project(":feature:auth:sign_up"))
+    implementation(project(":feature:feedback_history"))
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
