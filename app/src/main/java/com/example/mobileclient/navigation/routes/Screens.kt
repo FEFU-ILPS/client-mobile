@@ -13,4 +13,6 @@ sealed class Screens(
     object SignUp : Screens("sign_up")
 
     object SignIn : Screens("sign_in")
+
+    object FeedbackHistory: Screens("feedback_history")
 }

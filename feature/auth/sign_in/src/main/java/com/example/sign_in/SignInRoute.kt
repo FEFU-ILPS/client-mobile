@@ -40,6 +40,12 @@ fun SignInRoute(
         viewModel.checkIsUserRemembered()
     }
 
+    LaunchedEffect(viewModel.isUserSignedIn.value) {
+        if (viewModel.isUserSignedIn.value) {
+            onNavigateToTexts()
+        }
+    }
+
     SignInScreen(
         modifier = Modifier
             .fillMaxSize()
