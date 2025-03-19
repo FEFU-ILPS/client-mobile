@@ -30,6 +30,7 @@ import com.example.api.dto.FeedbackDto
 import com.example.api.dto.UserMistakeDto
 import com.google.samples.modularization.ui.Error
 import com.google.samples.modularization.ui.Loading
+import com.google.samples.modularization.ui.PronunciationMarkText
 
 @Composable
 fun FeedbackRoute(
@@ -100,6 +101,15 @@ internal fun Content(
             val mistakeIndexes =
                 feedback.userMistakes.map { userMistakeDto -> userMistakeDto.phonemePosition }
             ColoredText(text = feedback.text.phoneticTranscription, indexes = mistakeIndexes)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Оценка:", modifier = Modifier.padding(8.dp))
+                PronunciationMarkText(feedback.mark)
+            }
+
             UserMistakesWidget(
                 feedback.userMistakes,
                 modifier = Modifier.fillMaxWidth()

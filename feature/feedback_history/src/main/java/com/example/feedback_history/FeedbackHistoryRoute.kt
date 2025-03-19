@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.api.dto.FeedbackHistoryItemDto
 import com.google.samples.modularization.ui.Error
 import com.google.samples.modularization.ui.Loading
+import com.google.samples.modularization.ui.PronunciationMarkText
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.OffsetDateTime
@@ -130,8 +131,8 @@ internal fun FeedbackWidget(
                 color = Color(0x6D000000)
             )
         }
-        Text(
-            text = mark,
+        PronunciationMarkText(
+            mark = mark,
             modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
