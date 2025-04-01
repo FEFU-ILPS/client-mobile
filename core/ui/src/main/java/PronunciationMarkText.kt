@@ -7,22 +7,38 @@ import androidx.compose.ui.graphics.Color
 import com.google.samples.modularization.ui.model.PronunciationMark
 
 @Composable
-fun PronunciationMarkText(mark: String, modifier: Modifier = Modifier) {
+fun PronunciationMarkText(mark: String, accuracy: Double, modifier: Modifier = Modifier) {
     when (val pronunciationMark = PronunciationMark.pronunciationMarkOf(mark)) {
         PronunciationMark.Excellent -> {
-            Text(text = pronunciationMark.mark, color = Color.Green, modifier = modifier)
+            Text(
+                text = "${pronunciationMark.mark} (${accuracy}%)",
+                color = Color.Green,
+                modifier = modifier
+            )
         }
 
         PronunciationMark.NeedImprovement -> {
-            Text(text = pronunciationMark.mark, color = Color(0xFFFF9800), modifier = modifier)
+            Text(
+                text = "${pronunciationMark.mark} (${accuracy}%)",
+                color = Color(0xFFFF9800),
+                modifier = modifier
+            )
         }
 
         PronunciationMark.Bad -> {
-            Text(text = pronunciationMark.mark, color = Color(0xFFFF5722), modifier = modifier)
+            Text(
+                text = "${pronunciationMark.mark} (${accuracy}%)",
+                color = Color(0xFFFF5722),
+                modifier = modifier
+            )
         }
 
         PronunciationMark.Wrong -> {
-            Text(text = pronunciationMark.mark, color = Color.Red, modifier = modifier)
+            Text(
+                text = "${pronunciationMark.mark} (${accuracy}%)",
+                color = Color.Red,
+                modifier = modifier
+            )
         }
 
         else -> {

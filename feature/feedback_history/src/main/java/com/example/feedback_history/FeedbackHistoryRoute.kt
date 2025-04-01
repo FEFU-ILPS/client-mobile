@@ -23,9 +23,6 @@ import com.example.api.dto.FeedbackHistoryItemDto
 import com.google.samples.modularization.ui.Error
 import com.google.samples.modularization.ui.Loading
 import com.google.samples.modularization.ui.PronunciationMarkText
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -95,6 +92,7 @@ internal fun Content(
                     textTitle = feedbackItem.textTitle,
                     mark = feedbackItem.mark,
                     timestamp = ZonedDateTime.parse(feedbackItem.timestamp),
+                    accuracy = feedbackItem.accuracy,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -113,6 +111,7 @@ internal fun Content(
 internal fun FeedbackWidget(
     textTitle: String,
     mark: String,
+    accuracy: Double,
     timestamp: ZonedDateTime,
     modifier: Modifier = Modifier
 ) {
@@ -133,6 +132,7 @@ internal fun FeedbackWidget(
         }
         PronunciationMarkText(
             mark = mark,
+            accuracy = accuracy,
             modifier = Modifier.align(Alignment.CenterEnd)
         )
     }

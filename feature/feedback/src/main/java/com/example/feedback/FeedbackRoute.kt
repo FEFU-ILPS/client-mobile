@@ -107,7 +107,7 @@ internal fun Content(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Оценка:", modifier = Modifier.padding(8.dp))
-                PronunciationMarkText(feedback.mark)
+                PronunciationMarkText(feedback.mark, feedback.accuracy)
             }
 
             UserMistakesWidget(
