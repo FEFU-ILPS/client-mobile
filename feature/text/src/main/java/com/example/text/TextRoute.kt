@@ -155,8 +155,8 @@ internal fun Content(
         modifier = modifier
     ) {
         Text(text = text.title, fontWeight = FontWeight.Bold)
-        Text(text = text.text)
-        Text(text = text.phoneticTranscription, color = Color.Gray)
+        Text(text = text.value)
+        Text(text = text.transcription, color = Color.Gray)
         RecordWidget(
             isRecording = isRecording,
             modifier = Modifier.fillMaxSize(),

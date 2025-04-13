@@ -1,5 +1,6 @@
 package com.example.text_list
 
+import androidx.paging.PagingData
 import com.example.api.dto.TextListItemDto
 
 sealed interface TextListUiState {
@@ -10,6 +11,6 @@ sealed interface TextListUiState {
     ) : TextListUiState
 
     data class Success(
-        val texts: List<TextListItemDto>
+        val texts: PagingData<TextListItemDto>
     ) : TextListUiState
 }

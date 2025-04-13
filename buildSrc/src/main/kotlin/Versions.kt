@@ -8,4 +8,5 @@ object Versions {
     const val retrofit = "2.9.0"
     const val room = "2.5.0"
     const val dataStore = "1.1.3"
+    const val paging = "3.3.6"
 }

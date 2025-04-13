@@ -7,17 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.example.api.dto.TextListItemDto
 import com.google.samples.modularization.ui.Error
 import com.google.samples.modularization.ui.Loading
@@ -29,42 +30,59 @@ fun TextListRoute(
     viewModel: TextListViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxSize()
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val state = viewModel.uiState.collectAsLazyPagingItems()
     TextListScreen(
         state = state,
         onSelectText = onSelectText,
-        onRetry = { viewModel.retry() },
+        onRetry = { state.retry() },
         modifier = modifier
     )
 }
 
 @Composable
 internal fun TextListScreen(
-    state: TextListUiState,
+    state: LazyPagingItems<TextListItemDto>,
     onSelectText: (String) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when (state) {
-        TextListUiState.Loading -> Loading(modifier = Modifier.fillMaxSize())
+    Content(
+        lazyPagingItems = state,
+        onSelectText = onSelectText,
+        modifier = modifier
+    )
+    state.apply {
+        when {
+            loadState.refresh is LoadState.Loading -> {
+                Loading(modifier = Modifier.fillMaxSize())
+            }
 
-        is TextListUiState.Success -> Content(
-            textItems = state.texts,
-            onSelectText = onSelectText,
-            modifier = modifier
-        )
+            loadState.refresh is LoadState.Error -> {
+                Error(
+                    cause = "Не удалось загрузить тексты",
+                    onRetry = onRetry,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
-        is TextListUiState.Error -> Error(
-            cause = "Не удалось загрузить тексты",
-            onRetry = onRetry,
-            modifier = Modifier.fillMaxSize()
-        )
+            loadState.append is LoadState.Loading -> {
+                Loading(modifier = Modifier.fillMaxSize())
+            }
+
+            loadState.append is LoadState.Error -> {
+                Error(
+                    cause = "Не удалось загрузить тексты",
+                    onRetry = onRetry,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
     }
 }
 
 @Composable
 internal fun Content(
-    textItems: List<TextListItemDto>,
+    lazyPagingItems: LazyPagingItems<TextListItemDto>,
     onSelectText: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -73,9 +91,10 @@ internal fun Content(
         modifier = modifier
     ) {
         items(
-            items = textItems,
-            key = { textItem -> textItem.id }
-        ) { textItem ->
+            count = lazyPagingItems.itemCount,
+            key = lazyPagingItems.itemKey { it.id }
+        ) { index ->
+            val textItem = lazyPagingItems[index]!!
             TextWidget(
                 textItem.title,
                 textItem.preview,

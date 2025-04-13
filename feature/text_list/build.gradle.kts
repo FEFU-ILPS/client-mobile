@@ -26,4 +26,5 @@ dependencies {
 
     compose()
     hilt()
+    paging()
 }
