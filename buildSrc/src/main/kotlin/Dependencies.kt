@@ -25,6 +25,8 @@ object Dependencies {
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
 
     const val datastore = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
+
+    const val paging = "androidx.paging:paging-compose:${Versions.paging}"
 }
 
 fun DependencyHandler.room() {
@@ -55,7 +57,10 @@ fun DependencyHandler.hilt() {
     kapt(Dependencies.hiltCompiler)
 }
 
-fun DependencyHandler.dataStore(){
+fun DependencyHandler.dataStore() {
     implementation(Dependencies.datastore)
+}
 
+fun DependencyHandler.paging() {
+    implementation(Dependencies.paging)
 }
