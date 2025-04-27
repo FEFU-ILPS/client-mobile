@@ -31,7 +31,7 @@
 # Запуск в Android Studio
 Для запуска необходимо:
 1. Склонировать репозиторий и импортировать в Android Studio [git clone git@github.com:wolox/<reponame>.git](https://github.com/FEFU-ILPS/client-mobile.git)
-2. Запустить [backend] (https://github.com/FEFU-ILPS/ILPS) в докере
+2. Запустить [backend](https://github.com/FEFU-ILPS/ILPS) в докере
 3. Создать в эмуляторе устройство с SDK не меньше 26
 4. Запустить приложение
 
