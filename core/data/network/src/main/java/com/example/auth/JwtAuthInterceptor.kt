@@ -20,11 +20,18 @@ class JwtAuthInterceptor @Inject constructor(
         if (requiresAuth(chain.request())) {
             request.addHeader("Authorization", "Bearer $token")
         }
-        return chain.proceed(request.build())
+        val response = chain.proceed(request.build())
+        if (response.code == 401) {
+            runBlocking {
+                authRepository.setUserRememberedFlag(false)
+            }
+            AuthEventBus.send(AppEvent.NavigateToLogin)
+        }
+        return response
     }
 
     private fun requiresAuth(request: Request): Boolean {
         val url = request.url.toString()
-        return !url.contains(Urls.AUTH_API_URL+"/login")
+        return !url.contains(Urls.AUTH_API_URL + "/login")
     }
 }

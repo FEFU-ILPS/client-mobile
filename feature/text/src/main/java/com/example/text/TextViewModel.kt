@@ -1,26 +1,35 @@
 package com.example.text
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.api.FeedbackApi
+import com.example.api.SoundApi
 import com.example.api.TextApi
+import com.example.api.dto.SoundSseEventStatus
+import com.example.api.sse.DefaultSoundTaskEventHandler
+import com.example.data_store.AuthDataStoreRepository
+import com.launchdarkly.eventsource.EventSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class TextViewModel @Inject constructor(
     private val textApi: TextApi,
-    private val feedbackApi: FeedbackApi,
+    private val soundApi: SoundApi,
+    private val authRepository: AuthDataStoreRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<TextUiState>(TextUiState.Loading)
@@ -68,15 +77,37 @@ class TextViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val audioFile = File(context.cacheDir, "audio_record.pcm")
             try {
-                val feedbackId = feedbackApi.createFeedback(
+                val soundTaskId = soundApi.createSoundProcessingTask(
                     MultipartBody.Part.createFormData(
-                        "audio",
+                        "file",
                         audioFile.name,
                         audioFile.asRequestBody()
-                    )
+                    ),
+                    textId!!.toRequestBody("text/plain".toMediaTypeOrNull())
                 ).id
-                _feedbackUiState.value = FeedbackUiState.Success(feedbackId)
+                val accessToken = authRepository.getAccessToken().first()
+                var eventSource: EventSource? = null
+                eventSource = DefaultSoundTaskEventHandler.startSseClient(
+                    soundTaskId = soundTaskId,
+                    accessToken = accessToken!!,
+                    onSSEConnectionOpened = { Log.d("sse", "sse connection opened") },
+                    onSSEConnectionClosed = { Log.d("sse", "sse connection closed") },
+                    onSSEEventReceived = { eventName, messageEvent ->
+                        Log.d("sse event recived:", messageEvent.toString())
+                        if (messageEvent.status == SoundSseEventStatus.COMPLETED) {
+                            //TODO достать айди фидбека
+                            _feedbackUiState.value = FeedbackUiState.Success("1")
+                            eventSource?.close()
+                        }
+                    },
+                    onSSEError = { e ->
+                        Log.e("sse failed", e.message.toString())
+                        _feedbackUiState.value = FeedbackUiState.Error(e.message.toString())
+                        eventSource?.close()
+                    }
+                )
             } catch (e: Exception) {
+                Log.e("failed to send file", e.message.toString())
                 _feedbackUiState.value = FeedbackUiState.Error(e.message.toString())
             }
         }

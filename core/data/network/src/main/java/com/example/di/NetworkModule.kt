@@ -3,6 +3,7 @@ package com.example.di
 import com.example.Urls
 import com.example.api.AuthApi
 import com.example.api.FeedbackApi
+import com.example.api.SoundApi
 import com.example.api.TextApi
 import com.example.auth.JwtAuthInterceptor
 import com.example.data_store.AuthDataStoreRepository
@@ -14,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.Duration
 import javax.inject.Singleton
 
 
@@ -30,6 +32,7 @@ class NetworkModule {
         return OkHttpClient().newBuilder()
             .addInterceptor(interceptor)
             .addInterceptor(jwtAuthInterceptor)
+            .readTimeout(Duration.ofMinutes(1))
             .build()
     }
 
@@ -69,5 +72,16 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSoundApi(okHttpClient: OkHttpClient): SoundApi {
+        return Retrofit.Builder()
+            .baseUrl(Urls.SOUND_API_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(SoundApi::class.java)
     }
 }

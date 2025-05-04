@@ -27,6 +27,8 @@ object Dependencies {
     const val datastore = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
 
     const val paging = "androidx.paging:paging-compose:${Versions.paging}"
+
+    const val sse = "com.launchdarkly:okhttp-eventsource:${Versions.sse}"
 }
 
 fun DependencyHandler.room() {
@@ -63,4 +65,8 @@ fun DependencyHandler.dataStore() {
 
 fun DependencyHandler.paging() {
     implementation(Dependencies.paging)
+}
+
+fun DependencyHandler.sse() {
+    implementation(Dependencies.sse)
 }

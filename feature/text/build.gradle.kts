@@ -13,6 +13,7 @@ dependencies {
 
     implementation(project(":core:ui"))
     implementation(project(":core:data:network"))
+    implementation(project(":core:data:data_store"))
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -27,4 +28,5 @@ dependencies {
     compose()
     retrofit()
     hilt()
+    sse()
 }
