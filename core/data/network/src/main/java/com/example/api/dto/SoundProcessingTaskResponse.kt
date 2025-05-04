@@ -1,5 +1,5 @@
 package com.example.api.dto
 
-data class FeedbackCreationResponseDto(
+data class SoundProcessingTaskResponse(
     val id: String
 )

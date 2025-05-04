@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.auth.AppEvent
+import com.example.auth.AuthEventBus
 import com.example.mobileclient.bottomnav.BottomNavMenu
 import com.example.mobileclient.navigation.RootNavGraph
+import com.example.mobileclient.navigation.routes.Screens
 import com.example.mobileclient.ui.theme.MobileClientTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +25,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
+            LaunchedEffect(Unit) {
+                AuthEventBus.events.collect { event ->
+                    when (event) {
+                        is AppEvent.NavigateToLogin -> {
+                            navController.navigate(Screens.SignIn.route) {
+                                popUpTo(0)
+                                launchSingleTop = true
+                            }
+                        }
+                    }
+                }
+            }
             MobileClientTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -38,7 +54,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         RootNavGraph(navController)
                     }
-
                 }
             }
         }

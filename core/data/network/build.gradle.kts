@@ -23,4 +23,5 @@ dependencies {
     retrofit()
     hilt()
     dataStore()
+    sse()
 }
