@@ -1,6 +1,6 @@
 package com.google.samples.modularization.ui.model
 
-enum class Mark(name: String) {
+enum class Mark(val code: String) {
     EXCELLENT("Правильно"),
     NEEDS_IMPROVEMENT("Требует улучшений"),
     BAD("Плохо"),

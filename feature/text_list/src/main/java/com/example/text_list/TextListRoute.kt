@@ -1,13 +1,17 @@
 package com.example.text_list
 
-import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -97,9 +102,8 @@ internal fun Content(
         ) { index ->
             val textItem = lazyPagingItems[index]!!
             TextWidget(
-                //textItem.title,
-                "(#${textItem.number})",
-                "textItem.preview",
+                title = "${textItem.title} (#${textItem.number})",
+                tags = textItem.tags,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -115,7 +119,7 @@ internal fun Content(
 @Composable
 internal fun TextWidget(
     title: String,
-    preview: String,
+    tags: List<String>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -126,11 +130,39 @@ internal fun TextWidget(
             text = title,
             fontWeight = FontWeight.Bold
         )
-        Text(
-            text = preview,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = Color(0x6D000000)
-        )
+        ExerciseTagWidget(tags)
+    }
+}
+
+@Composable
+internal fun ExerciseTagWidget(
+    tags: List<String>
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        tags.forEach { tag ->
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = Color(0xFF3F51B5),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text(
+                    text = tag,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.White,
+                    fontSize = 14.sp
+                )
+            }
+        }
     }
 }

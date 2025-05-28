@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -47,7 +48,9 @@ fun FeedbackRoute(
             viewModel.loadFeedback()
         },
         onNavigateBack = onNavigateBack,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize()
     )
 }
 
@@ -90,21 +93,23 @@ internal fun Content(
     text: TextDto,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-        ) {
+        item {
             Text(text = text.title, fontWeight = FontWeight.Bold)
+        }
+        item {
             Text(text = text.value)
+        }
+        item {
             val mistakeIndexes =
                 feedback.mistakes.map { userMistakeDto -> userMistakeDto.position }
             ColoredText(text = text.transcription, indexes = mistakeIndexes)
+        }
+        item {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -114,11 +119,10 @@ internal fun Content(
                 PronunciationMarkText(feedback.accuracy)
             }
 
-            UserMistakesWidget(
-                feedback.mistakes.sortedBy { it.position },
-                modifier = Modifier.fillMaxWidth()
-            )
         }
+        userMistakesWidget(
+            feedback.mistakes.sortedBy { it.position }
+        )
     }
 }
 
@@ -138,25 +142,6 @@ fun ColoredText(text: String, indexes: List<Int>) {
         }
     }
     Text(text = annotatedString)
-}
-
-@Composable
-fun UserMistakesWidget(
-    userMistakes: List<UserMistakeDto>,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(
-            items = userMistakes//,
-            //key = { userMistake -> userMistake.position }
-        ) { userMistake ->
-            UserMistakeItem(userMistake, modifier = Modifier.fillMaxWidth())
-        }
-    }
 }
 
 @Composable
@@ -214,5 +199,15 @@ fun TopNavigation(
             )
             Text(text = title)
         }
+    }
+}
+
+fun LazyListScope.userMistakesWidget(
+    userMistakes: List<UserMistakeDto>
+) {
+    items(
+        items = userMistakes
+    ) { userMistake ->
+        UserMistakeItem(userMistake)
     }
 }
