@@ -1,6 +1,6 @@
 package com.example.feedback
 
-import com.example.api.dto.FeedbackDto
+import com.example.api.dto.FeedbackResponse
 
 sealed interface FeedbackUiState {
 
@@ -11,6 +11,6 @@ sealed interface FeedbackUiState {
     ) : FeedbackUiState
 
     data class Success(
-        val feedback: FeedbackDto
+        val response: FeedbackResponse
     ) : FeedbackUiState
 }

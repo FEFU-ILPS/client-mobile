@@ -1,6 +1,6 @@
 package com.example.text
 
-import com.example.api.dto.TextDto
+import com.example.api.dto.ExerciseResponseDto
 
 sealed interface TextUiState {
     object Loading : TextUiState
@@ -10,6 +10,6 @@ sealed interface TextUiState {
     ) : TextUiState
 
     data class Success(
-        val text: TextDto
+        val exerciseResponseDto: ExerciseResponseDto
     ) : TextUiState
 }

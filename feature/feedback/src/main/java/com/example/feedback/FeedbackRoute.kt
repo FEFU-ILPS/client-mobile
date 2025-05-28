@@ -27,7 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.api.dto.FeedbackDto
+import com.example.api.dto.TextDto
 import com.example.api.dto.UserMistakeDto
+import com.example.feedback.model.UserMistakeType
 import com.google.samples.modularization.ui.Error
 import com.google.samples.modularization.ui.Loading
 import com.google.samples.modularization.ui.PronunciationMarkText
@@ -74,8 +76,9 @@ internal fun FeedbackScreen(
             FeedbackUiState.Loading -> Loading(modifier = Modifier.fillMaxSize())
 
             is FeedbackUiState.Success -> Content(
-                feedback = state.feedback,
+                feedback = state.response.item,
                 modifier = modifier,
+                text = state.response.embedded.text
             )
         }
     }
@@ -84,6 +87,7 @@ internal fun FeedbackScreen(
 @Composable
 internal fun Content(
     feedback: FeedbackDto,
+    text: TextDto,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -96,22 +100,22 @@ internal fun Content(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
         ) {
-            Text(text = feedback.text.title, fontWeight = FontWeight.Bold)
-            Text(text = feedback.text.text)
+            Text(text = text.title, fontWeight = FontWeight.Bold)
+            Text(text = text.value)
             val mistakeIndexes =
-                feedback.userMistakes.map { userMistakeDto -> userMistakeDto.phonemePosition }
-            ColoredText(text = feedback.text.phoneticTranscription, indexes = mistakeIndexes)
+                feedback.mistakes.map { userMistakeDto -> userMistakeDto.position }
+            ColoredText(text = text.transcription, indexes = mistakeIndexes)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Оценка:", modifier = Modifier.padding(8.dp))
-                PronunciationMarkText(feedback.mark, feedback.accuracy)
+                PronunciationMarkText(feedback.accuracy)
             }
 
             UserMistakesWidget(
-                feedback.userMistakes,
+                feedback.mistakes.sortedBy { it.position },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -147,8 +151,8 @@ fun UserMistakesWidget(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(
-            items = userMistakes,
-            key = { userMistake -> userMistake.phonemePosition }
+            items = userMistakes//,
+            //key = { userMistake -> userMistake.position }
         ) { userMistake ->
             UserMistakeItem(userMistake, modifier = Modifier.fillMaxWidth())
         }
@@ -164,10 +168,26 @@ fun UserMistakeItem(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(text = "Нужно было сказать:")
-        Text(text = userMistake.requiredPhoneme, color = Color.Green)
-        Text(text = "Вы сказали:")
-        Text(text = userMistake.userPhoneme, color = Color.Red)
+        val mistakeType = UserMistakeType.byCode(userMistake.type)
+        when (mistakeType) {
+            UserMistakeType.REPLACEMENT -> {
+                Text(text = "Нужно было сказать:")
+                Text(text = userMistake.reference, color = Color.Green)
+                Text(text = "Вы сказали:")
+                Text(text = userMistake.actual, color = Color.Red)
+            }
+
+            UserMistakeType.INSERTION -> {
+                Text(text = "Лишний звук:")
+                Text(text = userMistake.actual, color = Color.Green)
+            }
+
+            UserMistakeType.DELETION -> {
+                Text(text = "Не было сказано:")
+                Text(text = userMistake.reference, color = Color.Green)
+            }
+        }
+
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.text_list
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.example.api.dto.TextListItemDto
+import com.example.api.dto.ExerciseListItemDto
 import com.google.samples.modularization.ui.Error
 import com.google.samples.modularization.ui.Loading
 
@@ -41,7 +42,7 @@ fun TextListRoute(
 
 @Composable
 internal fun TextListScreen(
-    state: LazyPagingItems<TextListItemDto>,
+    state: LazyPagingItems<ExerciseListItemDto>,
     onSelectText: (String) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
@@ -82,7 +83,7 @@ internal fun TextListScreen(
 
 @Composable
 internal fun Content(
-    lazyPagingItems: LazyPagingItems<TextListItemDto>,
+    lazyPagingItems: LazyPagingItems<ExerciseListItemDto>,
     onSelectText: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -96,8 +97,9 @@ internal fun Content(
         ) { index ->
             val textItem = lazyPagingItems[index]!!
             TextWidget(
-                textItem.title,
-                textItem.preview,
+                //textItem.title,
+                "(#${textItem.number})",
+                "textItem.preview",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)

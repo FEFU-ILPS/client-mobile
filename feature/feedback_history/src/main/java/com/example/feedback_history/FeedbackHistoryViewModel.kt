@@ -1,9 +1,9 @@
 package com.example.feedback_history
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.api.FeedbackApi
+import com.example.api.TasksApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedbackHistoryViewModel @Inject constructor(
-    private val feedbackApi: FeedbackApi
+    private val tasksApi: TasksApi
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<FeedbackHistoryUiState>(FeedbackHistoryUiState.Loading)
@@ -26,10 +26,9 @@ class FeedbackHistoryViewModel @Inject constructor(
     private fun loadTexts() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = feedbackApi.getFeedbackHistory()
+                val response = tasksApi.getFeedbackHistory()
                 _uiState.value = FeedbackHistoryUiState.Success(response)
             } catch (e: Exception) {
-                Log.e("wtf",e.message.toString())
                 _uiState.value = FeedbackHistoryUiState.Error(e.message.toString())
             }
         }

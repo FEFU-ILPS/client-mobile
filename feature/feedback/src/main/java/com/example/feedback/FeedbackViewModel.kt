@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.api.FeedbackApi
+import com.example.api.TasksApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedbackViewModel @Inject constructor(
-    private val feedbackApi: FeedbackApi,
+    private val tasksApi: TasksApi,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -29,7 +29,7 @@ class FeedbackViewModel @Inject constructor(
     fun loadFeedback() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _uiState.value = FeedbackUiState.Success(feedbackApi.getFeedback(feedbackId!!))
+                _uiState.value = FeedbackUiState.Success(tasksApi.getTaskInfo(feedbackId!!))
             } catch (e: Exception) {
                 Log.e("err", e.message.toString())
                 _uiState.value = FeedbackUiState.Error(e.message.toString())

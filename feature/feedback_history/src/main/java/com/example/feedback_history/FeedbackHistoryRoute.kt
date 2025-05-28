@@ -89,8 +89,7 @@ internal fun Content(
                 key = { item -> item.id }
             ) { feedbackItem ->
                 FeedbackWidget(
-                    textTitle = feedbackItem.textTitle,
-                    mark = feedbackItem.mark,
+                    textTitle = feedbackItem.title,
                     timestamp = ZonedDateTime.parse(feedbackItem.timestamp),
                     accuracy = feedbackItem.accuracy,
                     modifier = Modifier
@@ -110,7 +109,6 @@ internal fun Content(
 @Composable
 internal fun FeedbackWidget(
     textTitle: String,
-    mark: String,
     accuracy: Double,
     timestamp: ZonedDateTime,
     modifier: Modifier = Modifier
@@ -131,7 +129,6 @@ internal fun FeedbackWidget(
             )
         }
         PronunciationMarkText(
-            mark = mark,
             accuracy = accuracy,
             modifier = Modifier.align(Alignment.CenterEnd)
         )

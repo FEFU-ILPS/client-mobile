@@ -56,7 +56,7 @@ class DefaultSoundTaskEventHandler private constructor(
                 },
                 onSSEError = onSSEError
             )
-            val url = "${Urls.SOUND_API_URL}${soundTaskId}/stream"
+            val url = "${Urls.TASKS_API_URL}${soundTaskId}/stream"
 
             val headers = Headers.Builder()
                 .add("Authorization", "Bearer $accessToken")

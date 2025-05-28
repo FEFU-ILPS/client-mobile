@@ -25,8 +25,8 @@ fun NavGraphBuilder.textsNavGraph(navController: NavController) {
         }
 
         composable(
-            route = Screens.Text.route + "/{textId}",
-            listOf(navArgument("textId") { type = NavType.StringType })
+            route = Screens.Text.route + "/{exerciseId}",
+            listOf(navArgument("exerciseId") { type = NavType.StringType })
         ) {
             TextRoute(
                 onNavigateBack = {

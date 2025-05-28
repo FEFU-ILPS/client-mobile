@@ -80,15 +80,21 @@ fun TextRoute(
             }
 
         },
-        onStopRecording = {
-            viewModel.stopRecording(context)
+        onStopRecording = { title, textId ->
+            viewModel.stopRecording(context = context, title = title, textId = textId)
         },
         onNavigateBack = onNavigateBack,
         isRecording = viewModel.isRecording.value,
         modifier = Modifier.padding(16.dp),
         onGoToFeedbackScreen = { id -> onGoToFeedbackScreen(id) },
         feedbackUiState = feedbackState,
-        onRetryAudioUploading = { viewModel.retryFileUploading(context) }
+        onRetryAudioUploading = { title, textId ->
+            viewModel.retryFileUploading(
+                context = context,
+                title = title,
+                textId = textId
+            )
+        }
     )
 }
 
@@ -99,10 +105,10 @@ internal fun TextScreen(
     onRecord: () -> Unit,
     onRetry: () -> Unit,
     onNavigateBack: () -> Unit,
-    onStopRecording: () -> Unit,
+    onStopRecording: (title: String, textId: String) -> Unit,
     modifier: Modifier = Modifier,
     onGoToFeedbackScreen: (String) -> Unit,
-    onRetryAudioUploading: () -> Unit,
+    onRetryAudioUploading: (title: String, textId: String) -> Unit,
     feedbackUiState: FeedbackUiState
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -124,7 +130,7 @@ internal fun TextScreen(
             TextUiState.Loading -> Loading(modifier = Modifier.fillMaxSize())
 
             is TextUiState.Success -> Content(
-                text = state.text,
+                text = state.exerciseResponseDto.embed.text,
                 isRecording = isRecording,
                 onRecord = onRecord,
                 onStopRecording = onStopRecording,
@@ -144,9 +150,9 @@ internal fun Content(
     isRecording: Boolean,
     modifier: Modifier = Modifier,
     onRecord: () -> Unit,
-    onStopRecording: () -> Unit,
+    onStopRecording: (title: String, textId: String) -> Unit,
     onGoToFeedbackScreen: (String) -> Unit,
-    onRetryAudioUploading: () -> Unit,
+    onRetryAudioUploading: (title: String, textId: String) -> Unit,
     feedbackUiState: FeedbackUiState
 ) {
     Column(
@@ -162,8 +168,8 @@ internal fun Content(
             modifier = Modifier.fillMaxSize(),
             feedbackUiState = feedbackUiState,
             onRecord = onRecord,
-            onStopRecording = onStopRecording,
-            onRetryAudioUploading = onRetryAudioUploading,
+            onStopRecording = { onStopRecording(text.title, text.id) },
+            onRetryAudioUploading = { onRetryAudioUploading(text.title, text.id) },
             onGoToFeedbackScreen = onGoToFeedbackScreen
         )
     }

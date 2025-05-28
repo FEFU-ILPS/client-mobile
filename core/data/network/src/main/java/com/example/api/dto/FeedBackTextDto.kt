@@ -2,7 +2,7 @@ package com.example.api.dto
 
 data class FeedBackTextDto(
     val id: String,
-    val text: String,
+    val value: String,
     val title: String,
-    val phoneticTranscription: String
+    val transcription: String
 )

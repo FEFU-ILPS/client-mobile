@@ -3,8 +3,8 @@ package com.example.di
 import com.example.Urls
 import com.example.api.AuthApi
 import com.example.api.FeedbackApi
-import com.example.api.SoundApi
-import com.example.api.TextApi
+import com.example.api.TasksApi
+import com.example.api.ExercisesApi
 import com.example.auth.JwtAuthInterceptor
 import com.example.data_store.AuthDataStoreRepository
 import dagger.Module
@@ -43,13 +43,13 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTextApi(okHttpClient: OkHttpClient): TextApi {
+    fun provideTextApi(okHttpClient: OkHttpClient): ExercisesApi {
         return Retrofit.Builder()
-            .baseUrl(Urls.TEXT_API_URL)
+            .baseUrl(Urls.EXERCISES_API_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(TextApi::class.java)
+            .create(ExercisesApi::class.java)
     }
 
     @Provides
@@ -76,12 +76,12 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSoundApi(okHttpClient: OkHttpClient): SoundApi {
+    fun provideTasksApi(okHttpClient: OkHttpClient): TasksApi {
         return Retrofit.Builder()
-            .baseUrl(Urls.SOUND_API_URL)
+            .baseUrl(Urls.TASKS_API_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(SoundApi::class.java)
+            .create(TasksApi::class.java)
     }
 }

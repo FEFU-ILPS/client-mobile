@@ -1,7 +1,8 @@
 package com.example.api.dto
 
 data class UserMistakeDto(
-    val phonemePosition: Int,
-    val requiredPhoneme: String,
-    val userPhoneme: String
+    val position: Int,
+    val reference: String,
+    val actual: String,
+    val type: String
 )
