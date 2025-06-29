@@ -10,8 +10,8 @@ enum class Mark(val code: String) {
         fun markOf(accuracy: Double): Mark {
             return when {
                 accuracy >= 80 -> EXCELLENT
-                accuracy in 50.0..79.0 -> NEEDS_IMPROVEMENT
-                accuracy in 30.0..49.0 -> BAD
+                accuracy >= 50 -> NEEDS_IMPROVEMENT
+                accuracy >= 30 -> BAD
                 else -> WRONG
             }
         }

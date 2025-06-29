@@ -2,7 +2,6 @@ package com.example.di
 
 import com.example.Urls
 import com.example.api.AuthApi
-import com.example.api.FeedbackApi
 import com.example.api.TasksApi
 import com.example.api.ExercisesApi
 import com.example.auth.JwtAuthInterceptor
@@ -16,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -33,6 +33,7 @@ class NetworkModule {
             .addInterceptor(interceptor)
             .addInterceptor(jwtAuthInterceptor)
             .readTimeout(Duration.ofMinutes(1))
+            .writeTimeout(Duration.ofMinutes(2))
             .build()
     }
 
@@ -50,17 +51,6 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ExercisesApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFeedbackApi(okHttpClient: OkHttpClient): FeedbackApi {
-        return Retrofit.Builder()
-            .baseUrl(Urls.FEEDBACK_API_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(FeedbackApi::class.java)
     }
 
     @Provides

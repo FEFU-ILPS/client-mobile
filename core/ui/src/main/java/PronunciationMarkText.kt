@@ -11,7 +11,7 @@ fun PronunciationMarkText(accuracy: Double, modifier: Modifier = Modifier) {
     when (val mark = Mark.markOf(accuracy)) {
         Mark.EXCELLENT -> {
             Text(
-                text = "${mark.code} (${accuracy}%)",
+                text = "${mark.code} (${String.format("%.2f", accuracy)}%)",
                 color = Color.Green,
                 modifier = modifier
             )
@@ -19,7 +19,7 @@ fun PronunciationMarkText(accuracy: Double, modifier: Modifier = Modifier) {
 
         Mark.NEEDS_IMPROVEMENT -> {
             Text(
-                text = "${mark.code} (${accuracy}%)",
+                text = "${mark.code} (${String.format("%.2f", accuracy)}%)",
                 color = Color(0xFFFF9800),
                 modifier = modifier
             )
@@ -27,7 +27,7 @@ fun PronunciationMarkText(accuracy: Double, modifier: Modifier = Modifier) {
 
         Mark.BAD -> {
             Text(
-                text = "${mark.code} (${accuracy}%)",
+                text = "${mark.code} (${String.format("%.2f", accuracy)}%)",
                 color = Color(0xFFFF5722),
                 modifier = modifier
             )
@@ -35,7 +35,7 @@ fun PronunciationMarkText(accuracy: Double, modifier: Modifier = Modifier) {
 
         Mark.WRONG -> {
             Text(
-                text = "${mark.code} (${accuracy}%)",
+                text = "${mark.code} (${String.format("%.2f", accuracy)}%)",
                 color = Color.Red,
                 modifier = modifier
             )

@@ -2,7 +2,6 @@ package com.example.feedback_history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.api.FeedbackApi
 import com.example.api.TasksApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

@@ -1,5 +1,6 @@
 package com.example.feedback
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -105,9 +107,31 @@ internal fun Content(
             Text(text = text.value)
         }
         item {
-            val mistakeIndexes =
-                feedback.mistakes.map { userMistakeDto -> userMistakeDto.position }
-            ColoredText(text = text.transcription, indexes = mistakeIndexes)
+            val referenceMistakes = feedback.mistakes.filter {
+                it.type != UserMistakeType.INSERTION.code && it.reference != null
+            }
+            val referenceMap = referenceMistakes.associate {
+                it.reference!!.position to UserMistakeType.byCode(it.type)
+            }
+            ColoredText(
+                text = text.transcription,
+                indexToMistakeType = referenceMap
+            )
+        }
+        item {
+            Text(text = "Результат:")
+        }
+        item {
+            val insertionMistakes = feedback.mistakes.filter {
+                it.type != UserMistakeType.DELETION.code && it.actual != null
+            }
+            val insertionMap = insertionMistakes.associate {
+                it.actual!!.position to UserMistakeType.byCode(it.type)
+            }
+            ColoredText(
+                text = feedback.result,
+                indexToMistakeType = insertionMap
+            )
         }
         item {
             Row(
@@ -121,28 +145,36 @@ internal fun Content(
 
         }
         userMistakesWidget(
-            feedback.mistakes.sortedBy { it.position }
+            feedback.mistakes.sortedBy {
+                (it.reference ?: it.actual)?.position
+            }
         )
     }
 }
 
 
 @Composable
-fun ColoredText(text: String, indexes: List<Int>) {
+fun ColoredText(text: String, indexToMistakeType: Map<Int, UserMistakeType>) {
     val annotatedString = buildAnnotatedString {
-        for (i in text.indices) {
-            val isColored = i in indexes
-            if (isColored) {
-                pushStyle(SpanStyle(color = Color.Red))
+        val words = text.split(" ")
+        words.forEachIndexed { index, word ->
+            val mistakeType = indexToMistakeType[index]
+            if (mistakeType != null) {
+                pushStyle(SpanStyle(color = mistakeType.color))
             }
-            append(text[i])
-            if (isColored) {
+            append(word)
+            if (mistakeType != null) {
                 pop()
+            }
+            if (index != words.lastIndex) {
+                append(" ")
             }
         }
     }
+
     Text(text = annotatedString)
 }
+
 
 @Composable
 fun UserMistakeItem(
@@ -157,19 +189,19 @@ fun UserMistakeItem(
         when (mistakeType) {
             UserMistakeType.REPLACEMENT -> {
                 Text(text = "Нужно было сказать:")
-                Text(text = userMistake.reference, color = Color.Green)
+                Text(text = userMistake.reference?.value ?: "", color = Color.Green)
                 Text(text = "Вы сказали:")
-                Text(text = userMistake.actual, color = Color.Red)
+                Text(text = userMistake.actual?.value ?: "", color = Color.Red)
             }
 
             UserMistakeType.INSERTION -> {
                 Text(text = "Лишний звук:")
-                Text(text = userMistake.actual, color = Color.Green)
+                Text(text = userMistake.actual?.value ?: "", color = Color.Green)
             }
 
             UserMistakeType.DELETION -> {
                 Text(text = "Не было сказано:")
-                Text(text = userMistake.reference, color = Color.Green)
+                Text(text = userMistake.reference?.value ?: "", color = Color.Green)
             }
         }
 
@@ -208,6 +240,6 @@ fun LazyListScope.userMistakesWidget(
     items(
         items = userMistakes
     ) { userMistake ->
-        UserMistakeItem(userMistake)
+        UserMistakeItem(userMistake, modifier = Modifier.horizontalScroll(rememberScrollState()))
     }
 }
